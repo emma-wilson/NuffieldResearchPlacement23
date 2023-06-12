@@ -17,11 +17,11 @@
 # Note: You only need to install packages once. However, you will need to load 
 # your R packages each time to open a new R session.
 
-# Install the tidyverse package (you only need to do this once)
+# Install the relevant packages (you only need to do this once)
 install.packages("dplyr")
 install.packages("readr")
 
-# Load the tidyverse package (you need to load this in every new R session)
+# Load the relevant packages (you need to load this in every new R session)
 library(dplyr)
 library(readr)
 
