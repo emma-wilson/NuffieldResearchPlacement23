@@ -114,7 +114,6 @@ soles <- rbind(soles_ad, soles_depression, soles_ndc,
 # To avoid confusion, let's remove the individual datasets from our environment.
 rm(soles_ad, soles_depression, soles_ndc, soles_psychosis, soles_stroke)
 
-
 # Let's have a look at our new dataset
 dim(soles)
 colnames(soles)
