@@ -93,7 +93,7 @@ head(soles_stroke$date)
 
 
 
-# Combine and Format SOLES Data ================================================
+# 1.4: Combine and Format SOLES Data ===========================================
 
 # We currently have 5 datasets with data from different SOLES projects.
 # We want to combine the data into one big dataset.
@@ -121,7 +121,7 @@ colnames(soles)
 head(soles)
 
 
-# 1.4: Deal with Missing Data ==================================================
+# 1.5: Deal with Missing Data ==================================================
 
 # It's common for large datasets (and sometimes even small ones) to be missing
 # some data.
@@ -139,7 +139,7 @@ sum(is.na(soles$title)) # Missing titles
 sum(is.na(soles$doi)) # Missing digital object identifier (DOI)
 
 
-# 1.5: SAVE SOLES Data =========================================================
+# 1.6: Save SOLES Data =========================================================
 
 # It's important that we don't lose our data so we have to save it.
 
