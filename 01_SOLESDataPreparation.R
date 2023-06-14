@@ -32,17 +32,18 @@ library(readr)
 # We need to read in our data so that we can use it in R.
 
 # Read in data from SOLES csv files
-soles_ad         <- read_csv("data-raw/soles/ad-soles.csv")
-soles_depression <- read_csv("data-raw/soles/depression-soles.csv")
-soles_ndc        <- read_csv("data-raw/soles/ndc-soles.csv")
-soles_psychosis  <- read_csv("data-raw/soles/psychosis-soles.csv")
-soles_stroke     <- read_csv("data-raw/soles/stroke-soles.csv")
+soles_ad     <- read_csv("data-raw/soles-ad.csv")
+soles_ndc    <- read_csv("data-raw/soles-ndc.csv")
+soles_stroke <- read_csv("data-raw/soles-stroke.csv")
 
 
 # 1.3: Explore SOLES Data ======================================================
 
 # We can write code to look at the number of columns and rows in each dataset.
 dim(soles_ad)
+
+# The first number in the output is the number of rows and the second number is 
+# the number of columns.
 
 # 1.3.1: Exercise --------------------------------------------------------------
 
@@ -59,16 +60,16 @@ dim(soles_ad)
 # Let's look at the column names in the Alzheimer's SOLES dataset.
 colnames(soles_ad)
 
-# Let's look at the data in the first few rows of the Depression SOLES dataset.
-head(soles_depression)
+# Let's look at the data in the first few rows of the NDC SOLES dataset.
+head(soles_ndc)
 
 # ... And the last few rows of the NDC SOLES dataset.
 tail(soles_ndc)
 
 
-# Let's look at what type of data is in the title column of the Psychosis SOLES 
+# Let's look at what type of data is in the title column of the Stroke SOLES 
 # dataset.
-class(soles_psychosis$title)
+class(soles_stroke$title)
 
 # What about the date column of the Stroke SOLES dataset.
 class(soles_stroke$date)
@@ -77,7 +78,7 @@ head(soles_stroke$date)
 # Currently, the date is a character.
 # We can fix the data column in each SOLES dataset so that it displays the date
 # in the format YYYY-MM-DD, for example 2023-06-12
-soles_stroke$date <- as.Date(soles_stroke$date, "%Y%m%d")
+soles_stroke$date <- as.Date(soles_stroke$date, "%d%m%y")
 # Check it worked
 class(soles_stroke$date)
 head(soles_stroke$date)
@@ -93,6 +94,11 @@ head(soles_stroke$date)
 
 
 
+# Let's have a look at the oldest and most recent dates in AD SOLES
+min(soles_ad$date) # Shows us the oldest date
+max(soles_ad$date) # Shows us the most recent date
+
+
 # 1.4: Combine and Format SOLES Data ===========================================
 
 # We currently have 5 datasets with data from different SOLES projects.
@@ -102,17 +108,14 @@ head(soles_stroke$date)
 
 # Add a soles_id column
 soles_ad$soles_id         <- "ad"
-soles_depression$soles_id <- "depression"
 soles_ndc$soles_id        <- "ndc"
-soles_psychosis$soles_id  <- "psychosis"
 soles_stroke$soles_id     <- "stroke"
 
 # Now we can combine SOLES data into one big dataset.
-soles <- rbind(soles_ad, soles_depression, soles_ndc, 
-               soles_psychosis, soles_stroke)
+soles <- rbind(soles_ad, soles_ndc, soles_stroke)
 
 # To avoid confusion, let's remove the individual datasets from our environment.
-rm(soles_ad, soles_depression, soles_ndc, soles_psychosis, soles_stroke)
+rm(soles_ad, soles_ndc, soles_stroke)
 
 # Let's have a look at our new dataset
 dim(soles)
@@ -131,7 +134,7 @@ head(soles)
 # to NA.
 
 # Change all blank cells to NA
-soles <- soles %>% mutate_all(na_if,"")
+soles[soles==""]<-NA
 
 # Let's look at how much missing data we have.
 sum(is.na(soles$title)) # Missing titles
@@ -141,6 +144,9 @@ sum(is.na(soles$doi)) # Missing digital object identifier (DOI)
 # 1.6: Save SOLES Data =========================================================
 
 # It's important that we don't lose our data so we have to save it.
+
+# Create a folder for our processed data
+dir.create("data-processed")
 
 # Save our SOLES data as a csv file in the `data-processed` folder.
 
