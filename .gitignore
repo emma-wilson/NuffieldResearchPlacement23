@@ -1,3 +1,10 @@
+# Ignore data folders
+data-raw
+data-processed
+data-validation
+data-analysed
+graphics
+
 # History files
 .Rhistory
 .Rapp.history
