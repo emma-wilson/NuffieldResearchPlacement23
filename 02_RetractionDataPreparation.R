@@ -135,4 +135,4 @@ head(retract)
 
 # Save our retraction data as a csv file in the `data-processed` folder.
 
-write_csv(soles, "data-processed/retractions-combined.csv")
+write_csv(retract, "data-processed/retractions-combined.csv")
