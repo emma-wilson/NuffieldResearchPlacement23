@@ -29,6 +29,8 @@ colnames(retract)
 head(retract)
 
 
+# 3.3: Full merge
+
 # 3.3: Convert From Long to Wide ===============================================
 
 # Our data are in a format called tidy data or long format data.
@@ -37,14 +39,29 @@ head(retract)
 # Instead of having one column called method and one column called is_retracted,
 # we want an is_retracted column for each method, e.g. is_retracted_openalex
 
+# Create a column to label identified retractions with TRUE
+retract$is_retracted <- TRUE
+
+# Make sure all data is unique
+
 # Reformat the data
 retract <- retract %>%
   select(uid, method, is_retracted) %>%
+  distinct() %>%
   pivot_wider(
     names_from = method,
-    names_glue = "{is_retracted}_{method}",
     values_from = is_retracted
   )
+
+# Have another look at the data
+# You should see there are now three columns for openalex, endnote, and 
+# bibliographic
+dim(retract)
+colnames(retract)
+head(retract)
+
+# Replace NAs with FALSE
+retract[is.na(retract)] <- FALSE  
 
 
 # 3.4: Prepare for Validation ==================================================
@@ -64,9 +81,11 @@ retract <- retract %>%
 
 # It's important that we don't lose our data so we have to save it.
 
-# Save our retraction data as a csv file in the `data-validation` folder.
+# Create a folder called `data-validation`
+dir.create("data-validation")
 
-write_csv(soles, "data-validation/retractions_for_validation.csv")
+# Save our retraction data as a csv file in the `data-validation` folder.
+write_csv(retract, "data-validation/retractions-for-validation.csv")
 
 # We will download this file into Microsoft Teams to validate together.
 # Once we have finished, we can upload the completed file.

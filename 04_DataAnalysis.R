@@ -60,20 +60,20 @@ results <- data.frame(method = as.character(),
 # Get results for open alex
 results_openalex <- data.frame(method = "openalex",
                                true_pos = length(which(
-                                 dat$is_retracted_openalex == TRUE &
-                                   dat$is_retracted_validated == TRUE)),
+                                 data_val$openalex == TRUE &
+                                   data_val$is_retracted_validation == TRUE)),
                                true_neg = length(which(
-                                 dat$is_retracted_openalex == FALSE & 
-                                   dat$is_retracted_validated == FALSE)),
+                                 data_val$openalex == FALSE & 
+                                   data_val$is_retracted_validation == FALSE)),
                                false_pos = length(which(
-                                 dat$is_retracted_openalex == TRUE & 
-                                   dat$is_retracted_validated == FALSE)),
+                                 data_val$openalex == TRUE & 
+                                   data_val$is_retracted_validation == FALSE)),
                                false_neg = length(which(
-                                 dat$is_retracted_openalex == FALSE & 
-                                   dat$is_retracted_validated == TRUE)))
+                                 data_val$openalex == FALSE & 
+                                   data_val$is_retracted_validation == TRUE)))
 
 # Combine this with results dataframe
-results <- rbind(result, results_openalex)
+results <- rbind(results, results_openalex)
 
 
 # 4.3.1: Exercise --------------------------------------------------------------
@@ -108,6 +108,8 @@ results <- results %>%
 
 # It's important that we don't lose our data so we have to save it.
 
-# Save our retraction data as a csv file in the `data-analysed` folder.
+# Create a folder called `data-analysed`
+dir.create("data-analysed")
 
-write_csv(soles, "data-analysed/results.csv")
+# Save our retraction data as a csv file in the `data-analysed` folder.
+write_csv(results, "data-analysed/results.csv")
