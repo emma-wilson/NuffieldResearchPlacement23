@@ -54,7 +54,7 @@ colnames(retract_openalex)
 head(retract_openalex)
 
 
-# 2.3: Read and Format EndNote Data ============================================
+# 2.4: Read and Format EndNote Data ============================================
 
 # We previously collected some data on whether publications were retracted or
 # not using EndNote's integration with Retraction Watch. We did this in advance 
@@ -78,7 +78,7 @@ colnames(retract_endnote)
 head(retract_endnote)
 
 
-# 2.4: Read and Format Bibliographic Data ======================================
+# 2.5: Read and Format Bibliographic Data ======================================
 
 # All of the publications included in the SOLES databases are from various
 # bibliograph databases.
@@ -115,7 +115,7 @@ colnames(retract_biblio)
 head(retract_biblio)
 
 
-# 2.5: Combine Retraction Data Into One Dataset ================================
+# 2.6: Combine Retraction Data Into One Dataset ================================
 
 # Now we can combine all the retraction datasets into one.
 retract <- rbind(retract_openalex, retract_endnote, retract_biblio)
@@ -129,7 +129,7 @@ colnames(retract)
 head(retract)
 
 
-# 2.6: Save Retraction Data ====================================================
+# 2.7: Save Retraction Data ====================================================
 
 # It's important that we don't lose our data so we have to save it.
 
