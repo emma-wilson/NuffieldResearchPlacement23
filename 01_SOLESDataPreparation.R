@@ -150,4 +150,4 @@ dir.create("data-processed")
 
 # Save our SOLES data as a csv file in the `data-processed` folder.
 
-write_csv(soles, "data-processed/soles_combined.csv")
+write_csv(soles, "data-processed/soles-combined.csv")
