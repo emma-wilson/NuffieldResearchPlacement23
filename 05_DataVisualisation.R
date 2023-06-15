@@ -12,11 +12,14 @@
 
 # Install the relevant packages (you only need to do this once)
 install.packages("ggplot2")
+install.packages("ggrepel")
 
 # Load the relevant packages (you need to load this in every new R session)
 library(dplyr)
 library(readr)
+library(tidyr)
 library(ggplot2)
+library(ggrepel)
 
 
 # 5.2: Read In Analysed Data =========================+=========================
@@ -36,13 +39,8 @@ head(results)
 # each method, and each bar will show to number of true positives, false
 # positives, and false negatives.
 
-# First, we want to remove the false negative column as we don't want this in
-# our graph.
-results <- results %>%
-  select(-false_neg)
-
-# Next, we will have to convert the data from wide to long format.
-results <- results %>%
+# First, we will have to convert the data from wide to long format.
+plot_bar <- results %>%
   pivot_longer(cols = starts_with(c("true_", "false_")), 
                names_to = "category",
                values_to = "count")
@@ -52,22 +50,40 @@ dim(results)
 colnames(results)
 head(results)
 
+# Finally, we want to specify the order that our categories will appear in
+plot_bar$category <- as.factor(plot_bar$category)
+plot_bar$category <- factor(plot_bar$category, levels = c("false_pos", "false_neg", "true_pos", "true_neg"))
 
-# 5.4: Create Graph ============================================================
 
-# Now our data is in the correct format, we can create the graph.
+# 5.4: Create Bar Graph ========================================================
 
-plot_bar <- ggplot(results, aes(x = method, y = count, fill = category)) +
+# Now our data is in the correct format, we can create a bar graph.
+
+plot_bar <- ggplot(plot_bar, aes(x = method, y = count, fill = category)) +
   geom_bar(position = "fill", stat = "identity") +
-  scale_fill_manual(values = c("true_pos" = "green", 
-                               "true_neg" = "blue",
-                               "false_pos" = "red",
-                               "false_neg" = "orange")) +
-  labs(x = "Method", y = "Count", fill = "Category") +
-  ggtitle("Stacked Barplot of Results")
+  scale_fill_manual(values = c("true_pos" = "pink", 
+                               "true_neg" = "purple",
+                               "false_pos" = "aquamarine",
+                               "false_neg" = "grey"),
+                    labels = c("False negatives",
+                               "False positives",
+                               "True positives",
+                               "True negatives")) +
+  labs(x = "Method", y = "Percent", fill = "Key") +
+  ggtitle("Comparison of 3 methods to identify retracted articles") +
+  theme_bw()
 
 
-# 3.5: Save Graphs =============================================================
+# 5.5: Create Scatter Plot =====================================================
+
+plot_scatter <- ggplot(results, aes(x=sensitivity, y=specificity)) + 
+  geom_point() +
+  geom_text_repel(aes(label = method)) +
+  labs(x = "Sensitivity", y = "Specificity") +
+  ggtitle("Sensitivity and specificity of 3 methods to identify retracted articles") +
+  theme_bw()
+
+# 5.6: Save Graphs =============================================================
 
 # We can save our graphs as image files.
 
@@ -75,4 +91,5 @@ plot_bar <- ggplot(results, aes(x = method, y = count, fill = category)) +
 dir.create("graphics")
 
 # Save as a png file
-ggsave("graphics/stacked_barplot.png", width = 8, height = 6, dpi = 300)
+ggsave("graphics/stacked_barplot.png", plot = plot_bar, width = 8, height = 6, dpi = 300)
+ggsave("graphics/scatterplot.png", plot = plot_scatter, width = 8, height = 6, dpi = 300)
