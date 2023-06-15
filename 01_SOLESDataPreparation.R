@@ -123,7 +123,33 @@ colnames(soles)
 head(soles)
 
 
-# 1.5: Deal with Missing Data ==================================================
+# 1.5: Check for uids which appear across multiple SOLES projects ==============
+
+# Some uids may appear in more than one SOLES dataset.
+# This means the sample record appears in e.g. AD-SOLES and Stroke-SOLES.
+# We want to fix this so that each record only appear once in the combined
+# dataset, and the soles_id correctly reflects all the SOLES projects a record
+# is in.
+
+# Find duplicates and correct the soles_id column
+dups <- soles %>%
+  filter(uid %in% soles[duplicated(soles$uid),]$uid) %>%
+  group_by(uid) %>%
+  mutate(soles_id_fix = paste0(soles_id, collapse = "; ")) %>%
+  select(-soles_id) %>%
+  rename(soles_id = soles_id_fix) %>%
+  distinct(uid, .keep_all = T)
+
+# Remove extra copies of duplicates from soles
+soles <- rbind(filter(soles,!uid%in%dups$uid), dups)
+
+# Have a look at our data now
+dim(soles)
+colnames(soles)
+tail(soles$soles_id)
+  
+
+# 1.6: Deal with Missing Data ==================================================
 
 # It's common for large datasets (and sometimes even small ones) to be missing
 # some data.
@@ -141,7 +167,7 @@ sum(is.na(soles$title)) # Missing titles
 sum(is.na(soles$doi)) # Missing digital object identifier (DOI)
 
 
-# 1.6: Save SOLES Data =========================================================
+# 1.7: Save SOLES Data =========================================================
 
 # It's important that we don't lose our data so we have to save it.
 
