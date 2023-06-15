@@ -24,11 +24,10 @@ library(readr)
 
 soles <- read_csv("data-processed/soles-combined.csv")
 
-# We only need to match up the IDs to let's select only the uid, soles_id, and
-# doi columns
+# We only want a few of the columns from soles, so let's select these.
 
 soles <- soles %>%
-  select(uid, soles_id, doi)
+  select(uid, soles_id, doi, title, author, journal, year)
 
 
 # 2.3: Read and Format Open Alex Data ==========================================
@@ -81,7 +80,7 @@ head(retract_endnote)
 # 2.5: Read and Format Bibliographic Data ======================================
 
 # All of the publications included in the SOLES databases are from various
-# bibliograph databases.
+# bibliographic databases.
 
 # Many of these databases also contain information on whether publications are
 # retracted or not.
@@ -113,6 +112,9 @@ retract_biblio <- merge(retract_biblio, soles, by = "uid")
 dim(retract_biblio)
 colnames(retract_biblio)
 head(retract_biblio)
+
+# Notice there are fewer rows? That's because not everything picked up in the
+# searches is in SOLES.
 
 
 # 2.6: Combine Retraction Data Into One Dataset ================================
