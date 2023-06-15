@@ -90,6 +90,9 @@ results <- rbind(results, results_openalex)
 # Let's have a look at the data
 view(results)
 
+
+# 4.4: Calculate Sensitivity and Specificity ===================================
+
 # Now we want to work out the sensitivity and specificity of each method.
 
 # In this case, the sensitivity is the ability of each method to correctly
@@ -104,7 +107,7 @@ results <- results %>%
   mutate(sensitivity = true_pos / (true_pos + false_neg),
          specificity = true_neg / (true_neg + false_pos))
 
-# 4.4: Save Results Data =======================================================
+# 4.5: Save Results Data =======================================================
 
 # It's important that we don't lose our data so we have to save it.
 
