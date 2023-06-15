@@ -29,8 +29,6 @@ colnames(retract)
 head(retract)
 
 
-# 3.3: Full merge
-
 # 3.3: Convert From Long to Wide ===============================================
 
 # Our data are in a format called tidy data or long format data.
@@ -46,9 +44,9 @@ retract$is_retracted <- TRUE
 
 # Reformat the data
 retract <- retract %>%
-  select(uid, method, is_retracted) %>%
-  distinct() %>%
+  select(-date) %>%
   pivot_wider(
+    id_cols = c(uid, soles_id, doi, title, author, journal, year),
     names_from = method,
     values_from = is_retracted
   )
@@ -61,7 +59,7 @@ colnames(retract)
 head(retract)
 
 # Replace NAs with FALSE
-retract[is.na(retract)] <- FALSE  
+retract[, 8:10][is.na(retract[, 8:10])] <- FALSE
 
 
 # 3.4: Prepare for Validation ==================================================
